@@ -4,7 +4,7 @@ import framework.AbstractInjectService;
 
 class SimpleConstructorInjection {
     static Car getCarFromSimpleConstructorInjection() {
-        AbstractInjectService injectService = new EngineModule();
+        AbstractInjectService injectService = new EngineService();
         return injectService.getObjectInstance(Car.class);
     }
 }
