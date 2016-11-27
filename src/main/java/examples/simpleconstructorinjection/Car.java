@@ -1,16 +1,14 @@
 package examples.simpleconstructorinjection;
 
 import framework.Inject;
+import lombok.Getter;
 
 class Car {
+    @Getter
     private Engine engine;
 
     @Inject(bindingName = "")
-    public Car(Engine engine) {
+    public Car(final Engine engine) {
         this.engine = engine;
-    }
-
-    Engine getEngine() {
-        return engine;
     }
 }

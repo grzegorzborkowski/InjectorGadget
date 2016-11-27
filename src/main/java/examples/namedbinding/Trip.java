@@ -1,16 +1,14 @@
 package examples.namedbinding;
 
 import framework.Inject;
+import lombok.Getter;
 
-public class Trip {
-    Accomodation accomodation;
+class Trip {
+    @Getter
+    private Accommodation accommodation;
 
     @Inject(bindingName = "Hotel")
-    public Trip(Accomodation accomodation) {
-        this.accomodation = accomodation;
-    }
-
-    public Accomodation getAccomodation() {
-        return accomodation;
+    public Trip(Accommodation accommodation) {
+        this.accommodation = accommodation;
     }
 }

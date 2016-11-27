@@ -2,7 +2,7 @@ package examples.twolevelconstructorinjection;
 
 import framework.AbstractInjectService;
 
-public class TransactionLogService extends AbstractInjectService {
+class TransactionLogService extends AbstractInjectService {
 
     @Override
     public void configure() {

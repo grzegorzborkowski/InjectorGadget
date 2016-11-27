@@ -2,9 +2,9 @@ package examples.namedbinding;
 
 import framework.AbstractInjectService;
 
-public class NamedBindingInjection {
-    static Accomodation getAccomodationFromNamedBindingInjection() {
+class NamedBindingInjection {
+    static Accommodation getAccomodationFromNamedBindingInjection() {
         AbstractInjectService injectService = new TripService();
-        return injectService.getObjectInstance(Trip.class).getAccomodation();
+        return injectService.getObjectInstance(Trip.class).getAccommodation();
     }
 }

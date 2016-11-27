@@ -5,7 +5,7 @@ import framework.AbstractInjectService;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExampleSingletonInjection {
+class ExampleSingletonInjection {
     static List<Activity> getActivities() {
         final int ACTIVITIES_NUMBER = 2;
         List<Activity> activities = new ArrayList<>();
