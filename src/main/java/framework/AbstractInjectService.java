@@ -19,6 +19,10 @@ abstract public class AbstractInjectService {
         bindings.put(source, dest);
     }
 
+    protected void addBindingWithName(Class source, Class dest, String bindingName) {
+
+    }
+
     public void configure() {
     }
 

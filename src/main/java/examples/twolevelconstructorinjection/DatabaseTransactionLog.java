@@ -4,7 +4,7 @@ import framework.Inject;
 
 public class DatabaseTransactionLog extends TransactionLog {
 
-    @Inject
+    @Inject(bindingName = "")
     public DatabaseTransactionLog(DatabaseTransactionLog transactionLog) {
         super(transactionLog);
     }

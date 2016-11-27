@@ -5,7 +5,7 @@ import framework.Inject;
 public class Activity {
     private LogService logService;
 
-    @Inject
+    @Inject(bindingName = "")
     public Activity(LogService logService) {
         this.logService = logService;
     }
