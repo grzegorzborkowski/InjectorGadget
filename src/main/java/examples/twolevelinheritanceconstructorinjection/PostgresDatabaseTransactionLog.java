@@ -1,4 +1,4 @@
-package examples.twolevelconstructorinjection;
+package examples.twolevelinheritanceconstructorinjection;
 
 import framework.Inject;
 

@@ -1,4 +1,4 @@
-package examples.twolevelconstructorinjection;
+package examples.twolevelinheritanceconstructorinjection;
 
 public abstract class TransactionLog {
     TransactionLog transactionLog;
