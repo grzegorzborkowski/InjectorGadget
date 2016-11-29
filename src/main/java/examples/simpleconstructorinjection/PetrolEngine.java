@@ -1,4 +1,6 @@
 package examples.simpleconstructorinjection;
 
-class PetrolEngine extends Engine {
+public class PetrolEngine extends Engine {
+    public PetrolEngine() {
+    }
 }

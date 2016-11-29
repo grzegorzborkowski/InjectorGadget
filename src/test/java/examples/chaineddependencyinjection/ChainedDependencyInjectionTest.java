@@ -4,6 +4,8 @@ import framework.AbstractInjectService;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.InvocationTargetException;
+
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -11,7 +13,7 @@ public class ChainedDependencyInjectionTest {
     private Car car;
 
     @Before
-    public void setUp() {
+    public void setUp() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         AbstractInjectService injectService = new CarService();
         this.car = injectService.getObjectInstance(Car.class);
     }

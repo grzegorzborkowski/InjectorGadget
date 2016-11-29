@@ -3,7 +3,7 @@ package examples.simpleconstructorinjection;
 import framework.Inject;
 import lombok.Getter;
 
-class Car {
+public class Car {
     @Getter
     private Engine engine;
 

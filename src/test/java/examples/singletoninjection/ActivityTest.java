@@ -9,15 +9,11 @@ import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
-/**
- * Activities returns two different Activity objects.
- * Activity object has a LogService instance injected, which is a singleton.
- * Checks if LogService of those Activites is indeed the same object.
- */
+
 public class ActivityTest {
 
     @Before
-    static List<Activity> getActivities() {
+    static List<Activity> getActivities() throws IllegalAccessException, InstantiationException {
         final int ACTIVITIES_NUMBER = 2;
         List<Activity> activities = new ArrayList<>();
         AbstractInjectService injectService = new ActivitySingletonService();

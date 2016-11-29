@@ -1,4 +1,4 @@
-package examples.simpleconstructorinjection;
+package examples.noinjectioncreation;
 
 public class Engine {
     public Engine() {
