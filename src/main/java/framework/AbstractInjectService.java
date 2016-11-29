@@ -51,8 +51,16 @@ abstract public class AbstractInjectService {
         ArrayList<Object> requiredParams = new ArrayList<>();
         for (Class param : params) {
             try {
-                Object object = param.newInstance();
-                requiredParams.add(object);
+                Object object;
+                if (bindings.containsKey(param)) {
+                    List<Class> binded = bindings.get(param);
+                    for (Class c : binded) {
+                        requiredParams.add(c.newInstance());
+                    }
+                } else {
+                    object = param.newInstance();
+                    requiredParams.add(object);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
