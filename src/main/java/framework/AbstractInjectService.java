@@ -55,10 +55,10 @@ abstract public class AbstractInjectService {
                 if (bindings.containsKey(param)) {
                     List<Class> binded = bindings.get(param);
                     for (Class c : binded) {
-                        requiredParams.add(c.newInstance());
+                        requiredParams.add(getInstance(c));
                     }
                 } else {
-                    object = param.newInstance();
+                    object = getInstance(param);
                     requiredParams.add(object);
                 }
             } catch (Exception e) {
