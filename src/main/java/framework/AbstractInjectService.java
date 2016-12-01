@@ -74,12 +74,28 @@ abstract public class AbstractInjectService {
     }
 
     private <T> Constructor<T> resolveConstructor(Class<T> tClass) {
-        return (Constructor<T>) tClass.getConstructors()[0];
+        Constructor<T> [] constructors = (Constructor<T>[]) tClass.getConstructors();
+        if(constructorMap.containsKey(tClass)){
+            return constructorMap.get(tClass);
+        }
+        else{
+            for (Constructor<T> c : constructors)
+            {
+                if (c.isAnnotationPresent(Inject.class))
+                {
+                    constructorMap.put(tClass, c);
+                    return c;
+                }
+            }
+        }
+        // Should be changed to null but right now it requires modifying the tests.
+        return constructors[0];
     }
 
     private <T> Class<?>[] resolveConstructorParams(Constructor<T> constructor) {
         return constructor.getParameterTypes();
     }
+
 
 
 
