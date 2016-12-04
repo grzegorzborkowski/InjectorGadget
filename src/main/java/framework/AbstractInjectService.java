@@ -79,10 +79,8 @@ abstract public class AbstractInjectService {
             return constructorMap.get(tClass);
         }
         else{
-            for (Constructor<T> c : constructors)
-            {
-                if (c.isAnnotationPresent(Inject.class))
-                {
+            for (Constructor<T> c : constructors) {
+                if (c.isAnnotationPresent(Inject.class)) {
                     constructorMap.put(tClass, c);
                     return c;
                 }
