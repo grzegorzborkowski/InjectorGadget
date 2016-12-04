@@ -7,7 +7,7 @@ public class Activity {
     @Getter
     private LogService logService;
 
-    @Inject(bindingName = "")
+    @Inject()
     public Activity(LogService logService) {
         this.logService = logService;
     }

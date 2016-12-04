@@ -5,7 +5,7 @@ import framework.Inject;
 public abstract class AbstractCylinder {
     Piston piston;
 
-    @Inject(bindingName = "")
+    @Inject()
     public AbstractCylinder(Piston piston) {
         this.piston = piston;
     }

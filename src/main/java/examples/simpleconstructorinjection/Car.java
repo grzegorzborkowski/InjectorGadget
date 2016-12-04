@@ -7,7 +7,7 @@ public class Car {
     @Getter
     private Engine engine;
 
-    @Inject(bindingName = "")
+    @Inject()
     public Car(final Engine engine) {
         this.engine = engine;
     }

@@ -8,7 +8,7 @@ public abstract class AbstractEngine {
     @Getter
     private AbstractCylinder cylinder;
 
-    @Inject(bindingName = "")
+    @Inject()
     public AbstractEngine(Distributor distributor, AbstractCylinder cylinder) {
         this.distributor = distributor;
         this.cylinder = cylinder;

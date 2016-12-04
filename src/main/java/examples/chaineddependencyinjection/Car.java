@@ -9,7 +9,7 @@ public class Car {
     private AbstractEngine engine;
     private SteeringWheel steeringWheel;
 
-    @Inject(bindingName = "")
+    @Inject()
     public Car(final AbstractEngine engine, final SteeringWheel steeringWheel) {
         this.engine = engine;
         this.steeringWheel = steeringWheel;
