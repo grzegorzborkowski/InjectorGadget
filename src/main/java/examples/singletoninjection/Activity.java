@@ -4,7 +4,11 @@ import framework.Inject;
 import lombok.Getter;
 
 public class Activity {
-    @Getter
+
+    public LogService getLogService() {
+        return logService;
+    }
+
     private LogService logService;
 
     @Inject()

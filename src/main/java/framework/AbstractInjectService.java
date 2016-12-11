@@ -13,10 +13,12 @@ abstract public class AbstractInjectService {
 
     private Map<Class, List<Class>> bindings;
     private Map<Class, Constructor> constructorMap;
+    private Map<Class, Object> singletons;
 
     public AbstractInjectService() {
         this.bindings = new HashMap<>();
         this.constructorMap = new HashMap<>();
+        this.singletons = new HashMap<>();
     }
 
     protected void addBinding(Class source, Class dest) {
@@ -42,6 +44,20 @@ abstract public class AbstractInjectService {
 
     public <T> T getObjectInstance(Class<T> tClass) {
         configure();
+        return resolveIfSingletonAndGetInstance(tClass);
+    }
+
+    public <T> T resolveIfSingletonAndGetInstance(Class<T> tClass){
+        if(tClass.isAnnotationPresent(Singleton.class)){
+            if(singletons.containsKey(tClass)){
+                return (T)singletons.get(tClass);
+            }
+            else{
+                T singleton = getInstance(tClass);
+                singletons.put(tClass, singleton);
+                return singleton;
+            }
+        }
         return getInstance(tClass);
     }
 
@@ -55,10 +71,10 @@ abstract public class AbstractInjectService {
                 if (bindings.containsKey(param)) {
                     List<Class> binded = bindings.get(param);
                     for (Class c : binded) {
-                        requiredParams.add(getInstance(c));
+                        requiredParams.add(resolveIfSingletonAndGetInstance(c));
                     }
                 } else {
-                    object = getInstance(param);
+                    object = resolveIfSingletonAndGetInstance(param);
                     requiredParams.add(object);
                 }
             } catch (Exception e) {
@@ -80,14 +96,19 @@ abstract public class AbstractInjectService {
         }
         else{
             for (Constructor<T> c : constructors) {
+                System.out.println(c.getParameterTypes().length);
                 if (c.isAnnotationPresent(Inject.class)) {
                     constructorMap.put(tClass, c);
                     return c;
                 }
             }
         }
-        // Should be changed to null but right now it requires modifying the tests.
-        return constructors[0];
+        try {
+            return tClass.getConstructor();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private <T> Class<?>[] resolveConstructorParams(Constructor<T> constructor) {

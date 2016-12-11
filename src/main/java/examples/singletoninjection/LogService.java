@@ -1,7 +1,8 @@
 package examples.singletoninjection;
 
+import framework.Inject;
 import framework.Singleton;
 
 @Singleton
-class LogService {
+public class LogService {
 }
