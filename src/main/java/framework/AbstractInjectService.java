@@ -2,35 +2,28 @@ package framework;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 abstract public class AbstractInjectService {
-
-    private Map<Class, Binding> bindings;
-    private Map<Class, Constructor> constructorMap;
-    private Map<Class, Object> singletons;
+    private BindingContainer bindingContainer;
 
     public AbstractInjectService() {
-        this.bindings = new HashMap<>();
-        this.constructorMap = new HashMap<>();
-        this.singletons = new HashMap<>();
+        this.bindingContainer = new BindingContainer();
     }
 
     protected void addBinding(Class source, Class dest) {
         source = checkNotNull(source);
         dest = checkNotNull(dest);
-        if (bindings.containsKey(source)) {
-            Binding binding = bindings.get(source);
+        if (bindingContainer.getBindings().containsKey(source)) {
+            Binding binding = bindingContainer.getBindings().get(source);
             List<Class> classList = binding.getClassList();
             classList.add(dest);
         } else {
             Binding binding = new Binding();
             binding.getClassList().add(dest);
-            bindings.put(source, binding);
+            bindingContainer.getBindings().put(source, binding);
         }
     }
 
@@ -48,12 +41,12 @@ abstract public class AbstractInjectService {
 
     public <T> T resolveIfSingletonAndGetInstance(Class<T> tClass){
         if(tClass.isAnnotationPresent(Singleton.class)){
-            if(singletons.containsKey(tClass)){
-                return (T)singletons.get(tClass);
+            if (bindingContainer.getSingletons().containsKey(tClass)) {
+                return (T) bindingContainer.getSingletons().get(tClass);
             }
             else{
                 T singleton = getInstance(tClass);
-                singletons.put(tClass, singleton);
+                bindingContainer.getSingletons().put(tClass, singleton);
                 return singleton;
             }
         }
@@ -67,8 +60,8 @@ abstract public class AbstractInjectService {
         for (Class param : params) {
             try {
                 Object object;
-                if (bindings.containsKey(param)) {
-                    List<Class> binded = bindings.get(param).getClassList();
+                if (bindingContainer.getBindings().containsKey(param)) {
+                    List<Class> binded = bindingContainer.getBindings().get(param).getClassList();
                     for (Class c : binded) {
                         requiredParams.add(resolveIfSingletonAndGetInstance(c));
                     }
@@ -90,13 +83,13 @@ abstract public class AbstractInjectService {
 
     private <T> Constructor<T> resolveConstructor(Class<T> tClass) {
         Constructor<T> [] constructors = (Constructor<T>[]) tClass.getConstructors();
-        if(constructorMap.containsKey(tClass)){
-            return constructorMap.get(tClass);
+        if (bindingContainer.getConstructorMap().containsKey(tClass)) {
+            return bindingContainer.getConstructorMap().get(tClass);
         }
         else{
             for (Constructor<T> c : constructors) {
                 if (c.isAnnotationPresent(Inject.class)) {
-                    constructorMap.put(tClass, c);
+                    bindingContainer.getConstructorMap().put(tClass, c);
                     return c;
                 }
             }
@@ -112,9 +105,4 @@ abstract public class AbstractInjectService {
     private <T> Class<?>[] resolveConstructorParams(Constructor<T> constructor) {
         return constructor.getParameterTypes();
     }
-
-
-
-
-
 }
