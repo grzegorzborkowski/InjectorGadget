@@ -1,8 +1,8 @@
 package examples.namedbinding;
 
-import framework.AbstractInjectService;
+import framework.BindingContainer;
 
-class TripService extends AbstractInjectService {
+class TripService extends BindingContainer {
     @Override
     public void configure() {
         addBindingWithName(Accommodation.class, Hotel.class, "Hotel");

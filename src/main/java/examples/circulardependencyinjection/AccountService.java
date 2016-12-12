@@ -1,13 +1,8 @@
 package examples.circulardependencyinjection;
 
-import framework.AbstractInjectService;
+import framework.BindingContainer;
 
-/**
- * Created by tomek on 04.12.2016.
- */
-
-
-class AccountService extends AbstractInjectService {
+class AccountService extends BindingContainer {
     @Override
     public void configure() {
     }

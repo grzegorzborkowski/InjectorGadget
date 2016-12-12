@@ -1,8 +1,8 @@
 package examples.simpleconstructorinjection;
 
-import framework.AbstractInjectService;
+import framework.BindingContainer;
 
-public class EngineService extends AbstractInjectService {
+public class EngineBindingContainer extends BindingContainer {
     @Override
     public void configure() {
         addBinding(Engine.class, PetrolEngine.class);

@@ -1,6 +1,6 @@
 package examples.circulardependencyinjection;
 
-import framework.AbstractInjectService;
+import framework.InjectService;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,7 +14,7 @@ public class CircularDependencyInjectionTest {
 
     @Before
     public void setUp() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        AbstractInjectService injectService = new AccountService();
+        InjectService injectService = new InjectService(new AccountService());
         this.account = injectService.getObjectInstance(Account.class);
     }
 

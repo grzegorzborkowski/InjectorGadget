@@ -1,8 +1,8 @@
 package examples.twolevelinheritanceconstructorinjection;
 
-import framework.AbstractInjectService;
+import framework.BindingContainer;
 
-class TransactionLogService extends AbstractInjectService {
+class TransactionBindingContainer extends BindingContainer {
 
     @Override
     public void configure() {

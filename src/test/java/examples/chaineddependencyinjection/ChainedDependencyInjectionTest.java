@@ -1,6 +1,6 @@
 package examples.chaineddependencyinjection;
 
-import framework.AbstractInjectService;
+import framework.InjectService;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,7 +14,7 @@ public class ChainedDependencyInjectionTest {
 
     @Before
     public void setUp() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        AbstractInjectService injectService = new CarService();
+        InjectService injectService = new InjectService(new CarBindingContainer());
         this.car = injectService.getObjectInstance(Car.class);
     }
 

@@ -4,38 +4,15 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-abstract public class AbstractInjectService {
+public class InjectService {
     private BindingContainer bindingContainer;
 
-    public AbstractInjectService() {
-        this.bindingContainer = new BindingContainer();
-    }
-
-    protected void addBinding(Class source, Class dest) {
-        source = checkNotNull(source);
-        dest = checkNotNull(dest);
-        if (bindingContainer.getBindings().containsKey(source)) {
-            Binding binding = bindingContainer.getBindings().get(source);
-            List<Class> classList = binding.getClassList();
-            classList.add(dest);
-        } else {
-            Binding binding = new Binding();
-            binding.getClassList().add(dest);
-            bindingContainer.getBindings().put(source, binding);
-        }
-    }
-
-    protected void addBindingWithName(Class source, Class dest, String name) {
-
-    }
-
-    public void configure() {
+    public InjectService(BindingContainer bindingContainer) {
+        this.bindingContainer = bindingContainer;
     }
 
     public <T> T getObjectInstance(Class<T> tClass) {
-        configure();
+        this.bindingContainer.configure();
         return resolveIfSingletonAndGetInstance(tClass);
     }
 

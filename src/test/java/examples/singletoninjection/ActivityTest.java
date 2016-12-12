@@ -1,13 +1,14 @@
 package examples.singletoninjection;
 
-import framework.AbstractInjectService;
+import framework.BindingContainer;
+import framework.InjectService;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertSame;
 
 
 public class ActivityTest {
@@ -16,7 +17,7 @@ public class ActivityTest {
     public void getActivities() throws IllegalAccessException, InstantiationException {
         final int ACTIVITIES_NUMBER = 2;
         activities = new ArrayList<>();
-        AbstractInjectService injectService = new ActivitySingletonService();
+        InjectService injectService = new InjectService(new BindingContainer());
         for (int i = 0; i < ACTIVITIES_NUMBER; i++) {
             activities.add(injectService.getObjectInstance(Activity.class));
         }
