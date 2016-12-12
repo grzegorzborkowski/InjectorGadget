@@ -1,6 +1,5 @@
 package framework;
 
-
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +10,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 abstract public class AbstractInjectService {
 
-    private Map<Class, List<Class>> bindings;
+    private Map<Class, Binding> bindings;
     private Map<Class, Constructor> constructorMap;
     private Map<Class, Object> singletons;
 
@@ -25,13 +24,13 @@ abstract public class AbstractInjectService {
         source = checkNotNull(source);
         dest = checkNotNull(dest);
         if (bindings.containsKey(source)) {
-            List<Class> bind = bindings.get(source);
-            bind.add(dest);
-            bindings.replace(source, bind);
+            Binding binding = bindings.get(source);
+            List<Class> classList = binding.getClassList();
+            classList.add(dest);
         } else {
-            List<Class> destList = new ArrayList<>();
-            destList.add(dest);
-            bindings.put(source, destList);
+            Binding binding = new Binding();
+            binding.getClassList().add(dest);
+            bindings.put(source, binding);
         }
     }
 
@@ -69,7 +68,7 @@ abstract public class AbstractInjectService {
             try {
                 Object object;
                 if (bindings.containsKey(param)) {
-                    List<Class> binded = bindings.get(param);
+                    List<Class> binded = bindings.get(param).getClassList();
                     for (Class c : binded) {
                         requiredParams.add(resolveIfSingletonAndGetInstance(c));
                     }
@@ -96,7 +95,6 @@ abstract public class AbstractInjectService {
         }
         else{
             for (Constructor<T> c : constructors) {
-                System.out.println(c.getParameterTypes().length);
                 if (c.isAnnotationPresent(Inject.class)) {
                     constructorMap.put(tClass, c);
                     return c;
