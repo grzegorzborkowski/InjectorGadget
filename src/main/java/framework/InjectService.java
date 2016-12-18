@@ -1,6 +1,9 @@
 package framework;
 
+import examples.parameterinjection.User;
+
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +17,18 @@ public class InjectService {
     public <T> T getObjectInstance(Class<T> tClass) {
         this.bindingContainer.configure();
         return resolveIfSingletonAndGetInstance(tClass);
+    }
+
+    public <T> void setObjectProperties(Class<T> tClass, Object tObject) {
+        for(Field f : tClass.getFields()){
+            if(f.isAnnotationPresent(Inject.class)){
+                try {
+                    f.set(tObject, resolveIfSingletonAndGetInstance(f.getType()));
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public <T> T resolveIfSingletonAndGetInstance(Class<T> tClass){
@@ -55,7 +70,9 @@ public class InjectService {
             }
         }
         try {
-            return constructor.newInstance(requiredParams.toArray(new Object[requiredParams.size()]));
+            T result = constructor.newInstance(requiredParams.toArray(new Object[requiredParams.size()]));
+            setObjectProperties(tClass, result);
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
         }
