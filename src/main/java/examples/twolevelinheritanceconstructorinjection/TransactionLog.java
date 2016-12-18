@@ -1,9 +1,9 @@
 package examples.twolevelinheritanceconstructorinjection;
 
-public abstract class TransactionLog {
-    TransactionLog transactionLog;
+import framework.Inject;
 
-    TransactionLog(final TransactionLog transactionLog) {
-        this.transactionLog = transactionLog;
+public abstract class TransactionLog {
+    @Inject()
+    public TransactionLog() {
     }
 }

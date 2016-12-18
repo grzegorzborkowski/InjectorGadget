@@ -31,6 +31,10 @@ public class InjectService {
     }
 
     private <T> T getInstance(Class<T> tClass) {
+        if (bindingContainer.getBindings().containsKey(tClass)) {
+            tClass = bindingContainer.getBindings().get(tClass).getClassList().get(0);
+            return getInstance(tClass);
+        }
         Constructor<T> constructor = resolveConstructor(tClass);
         Class<?>[] params = resolveConstructorParams(constructor);
         ArrayList<Object> requiredParams = new ArrayList<>();
