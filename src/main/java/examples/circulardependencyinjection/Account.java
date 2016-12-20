@@ -2,9 +2,6 @@ package examples.circulardependencyinjection;
 
 import framework.Inject;
 
-/**
- * Created by tomek on 04.12.2016.
- */
 class Account {
     public Person owner;
 

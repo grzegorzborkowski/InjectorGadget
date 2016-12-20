@@ -3,12 +3,10 @@ package framework;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Binding {
     @Getter
-    private List<Class> classList;
+    @Setter
+    private Class dependencyClass;
     @Getter
     private Scope scope;
     @Getter
@@ -16,13 +14,15 @@ public class Binding {
     private Object instance;
 
     public Binding() {
-        classList = new ArrayList<>();
+        dependencyClass = null;
+//        classList = new ArrayList<>();
         this.scope = Scope.PROTOTYPE;
         this.instance = null;
     }
 
     public Binding(Scope scope) {
-        classList = new ArrayList<>();
+        dependencyClass = null;
+//        classList = new ArrayList<>();
         this.scope = Scope.SINGLETON;
         this.instance = null;
     }
@@ -33,6 +33,6 @@ public class Binding {
 
     @Override
     public String toString() {
-        return String.format("Binding{classList=%s, scope=%s, instance=%s}", classList, scope, instance);
+        return String.format("Binding{classList=%s, scope=%s, instance=%s}", dependencyClass, scope, instance);
     }
 }

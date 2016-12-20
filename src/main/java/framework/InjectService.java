@@ -3,7 +3,6 @@ package framework;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.List;
 
 public class InjectService {
     private final Resolver resolver;
@@ -49,8 +48,8 @@ public class InjectService {
     }
 
     private <T> T getInstance(Class<T> tClass) {
-        if (bindingContainer.getBindings().containsKey(tClass) && !bindingContainer.getBindings().get(tClass).getClassList().isEmpty()) {
-            tClass = bindingContainer.getBindings().get(tClass).getClassList().get(0);
+        if (bindingContainer.getBindings().containsKey(tClass) && bindingContainer.getBindings().get(tClass).getDependencyClass() != null) {
+            tClass = bindingContainer.getBindings().get(tClass).getDependencyClass();
             return getInstance(tClass);
         }
         Constructor<T> constructor = resolver.resolveConstructor(tClass);
@@ -59,11 +58,9 @@ public class InjectService {
         for (Class param : params) {
             try {
                 Object object;
-                if (bindingContainer.getBindings().containsKey(param) && !bindingContainer.getBindings().get(param).getClassList().isEmpty()) {
-                    List<Class> binded = bindingContainer.getBindings().get(param).getClassList();
-                    for (Class c : binded) {
-                        requiredParams.add(resolveIfSingletonAndGetInstance(c));
-                    }
+                if (bindingContainer.getBindings().containsKey(param) && bindingContainer.getBindings().get(param).getDependencyClass() != null) {
+                    Class binded = bindingContainer.getBindings().get(param).getDependencyClass();
+                    requiredParams.add(resolveIfSingletonAndGetInstance(binded));
                 } else {
                     object = resolveIfSingletonAndGetInstance(param);
                     requiredParams.add(object);

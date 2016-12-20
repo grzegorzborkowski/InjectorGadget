@@ -2,11 +2,6 @@ package examples.circulardependencyinjection;
 
 import framework.Inject;
 
-import java.util.List;
-
-/**
- * Created by tomek on 04.12.2016.
- */
 class Person {
     private Account account;
 

@@ -3,7 +3,6 @@ package framework;
 import lombok.Getter;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -21,11 +20,10 @@ public class BindingContainer {
         dest = checkNotNull(dest);
         if (bindings.containsKey(source)) {
             Binding binding = bindings.get(source);
-            List<Class> classList = binding.getClassList();
-            classList.add(dest);
+            binding.setDependencyClass(dest);
         } else {
             Binding binding = new Binding();
-            binding.getClassList().add(dest);
+            binding.setDependencyClass(dest);
             bindings.put(source, binding);
         }
     }
