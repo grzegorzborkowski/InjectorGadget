@@ -1,6 +1,6 @@
 package examples.circulardependencyinjection;
 
-import framework.Inject;
+import framework.adnotations.Inject;
 
 class Person {
     private Account account;

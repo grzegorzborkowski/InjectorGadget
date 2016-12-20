@@ -1,6 +1,6 @@
 package examples.twolevelinheritanceconstructorinjection;
 
-import framework.Inject;
+import framework.adnotations.Inject;
 
 public class PostgresDatabaseTransactionLog extends DatabaseTransactionLog {
 

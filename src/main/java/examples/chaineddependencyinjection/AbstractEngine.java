@@ -1,6 +1,6 @@
 package examples.chaineddependencyinjection;
 
-import framework.Inject;
+import framework.adnotations.Inject;
 import lombok.Getter;
 
 public abstract class AbstractEngine {

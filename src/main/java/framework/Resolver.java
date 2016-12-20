@@ -1,5 +1,6 @@
 package framework;
 
+import framework.adnotations.Inject;
 import framework.exceptions.AmbigiousConstructorException;
 
 import java.lang.reflect.Constructor;

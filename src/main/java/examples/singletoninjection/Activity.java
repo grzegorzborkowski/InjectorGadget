@@ -1,18 +1,17 @@
 package examples.singletoninjection;
 
-import framework.Inject;
-import lombok.Getter;
+import framework.adnotations.Inject;
 
 public class Activity {
-
-    public LogService getLogService() {
-        return logService;
-    }
 
     private LogService logService;
 
     @Inject()
     public Activity(LogService logService) {
         this.logService = logService;
+    }
+
+    public LogService getLogService() {
+        return logService;
     }
 }

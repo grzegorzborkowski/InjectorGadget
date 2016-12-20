@@ -1,6 +1,6 @@
 package examples.chaineddependencyinjection;
 
-import framework.Inject;
+import framework.adnotations.Inject;
 
 public class Engine extends AbstractEngine {
     @Inject

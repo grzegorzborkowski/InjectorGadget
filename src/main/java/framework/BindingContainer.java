@@ -1,5 +1,6 @@
 package framework;
 
+import framework.adnotations.Singleton;
 import lombok.Getter;
 
 import java.util.HashMap;

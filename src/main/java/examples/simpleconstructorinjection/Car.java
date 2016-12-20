@@ -1,6 +1,6 @@
 package examples.simpleconstructorinjection;
 
-import framework.Inject;
+import framework.adnotations.Inject;
 import lombok.Getter;
 
 public class Car {

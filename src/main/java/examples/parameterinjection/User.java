@@ -1,13 +1,11 @@
 package examples.parameterinjection;
 
-import framework.Inject;
-import lombok.Getter;
+import framework.adnotations.Inject;
 
 public class User {
-    private RequiredInfo requiredInfo;
-
     @Inject
     public OptionalInfo optionalInfo;
+    private RequiredInfo requiredInfo;
 
     @Inject
     public User(RequiredInfo reqInfo){
