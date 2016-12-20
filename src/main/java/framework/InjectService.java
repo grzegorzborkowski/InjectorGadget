@@ -8,10 +8,12 @@ import java.util.List;
 public class InjectService {
     private final Resolver resolver;
     private BindingContainer bindingContainer;
+    private ObjectFactory objectFactory;
 
     public InjectService(BindingContainer bindingContainer) {
         this.bindingContainer = bindingContainer;
         this.resolver = new Resolver();
+        this.objectFactory = new ObjectFactory();
     }
 
     public <T> T getObjectInstance(Class<T> tClass) {
@@ -71,7 +73,7 @@ public class InjectService {
             }
         }
         try {
-            T result = constructor.newInstance(requiredParams.toArray(new Object[requiredParams.size()]));
+            T result = objectFactory.createObjectFromConstructorAndParams(constructor, requiredParams);
             setObjectProperties(tClass, result);
             return result;
         } catch (Exception e) {
