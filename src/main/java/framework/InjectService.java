@@ -6,10 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InjectService {
+    private final Resolver resolver;
     private BindingContainer bindingContainer;
 
     public InjectService(BindingContainer bindingContainer) {
         this.bindingContainer = bindingContainer;
+        this.resolver = new Resolver();
     }
 
     public <T> T getObjectInstance(Class<T> tClass) {
@@ -49,8 +51,8 @@ public class InjectService {
             tClass = bindingContainer.getBindings().get(tClass).getClassList().get(0);
             return getInstance(tClass);
         }
-        Constructor<T> constructor = resolveConstructor(tClass);
-        Class<?>[] params = resolveConstructorParams(constructor);
+        Constructor<T> constructor = resolver.resolveConstructor(tClass);
+        Class<?>[] params = resolver.resolveConstructorParams(constructor);
         ArrayList<Object> requiredParams = new ArrayList<>();
         for (Class param : params) {
             try {
@@ -76,30 +78,5 @@ public class InjectService {
             e.printStackTrace();
         }
         return null;
-    }
-
-    private <T> Constructor<T> resolveConstructor(Class<T> tClass) {
-        Constructor<T> [] constructors = (Constructor<T>[]) tClass.getConstructors();
-        if (bindingContainer.getConstructorMap().containsKey(tClass)) {
-            return bindingContainer.getConstructorMap().get(tClass);
-        }
-        else{
-            for (Constructor<T> c : constructors) {
-                if (c.isAnnotationPresent(Inject.class)) {
-                    bindingContainer.getConstructorMap().put(tClass, c);
-                    return c;
-                }
-            }
-        }
-        try {
-            return tClass.getConstructor();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private <T> Class<?>[] resolveConstructorParams(Constructor<T> constructor) {
-        return constructor.getParameterTypes();
     }
 }
