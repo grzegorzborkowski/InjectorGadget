@@ -1,6 +1,7 @@
 package framework;
 
 import framework.adnotations.Inject;
+import framework.resolvers.Resolver;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -13,8 +14,9 @@ public class InjectService {
 
     public InjectService(BindingContainer bindingContainer) {
         this.bindingContainer = bindingContainer;
-        this.resolver = new Resolver();
+        this.resolver = new Resolver(bindingContainer.getBindings());
         this.objectFactory = new ObjectFactory();
+        resolver.checkCycle();
     }
 
     public <T> T getObjectInstance(Class<T> tClass) {
@@ -45,18 +47,15 @@ public class InjectService {
         Class<?>[] params = resolver.resolveConstructorParams(constructor);
         ArrayList<Object> requiredParams = new ArrayList<>();
         for (Class param : params) {
-            try {
                 Object object;
                 if (bindingContainer.containsBindingToOtherClass(param)) {
                     Class binded = bindingContainer.getBindings().get(param).getDependencyClass();
                     requiredParams.add(resolveIfSingletonAndGetInstance(binded));
                 } else {
+                    resolver.getCycleResolver().addEdge(tClass, param);
                     object = resolveIfSingletonAndGetInstance(param);
                     requiredParams.add(object);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
         try {
             T result = objectFactory.createObjectFromConstructorAndParams(constructor, requiredParams);

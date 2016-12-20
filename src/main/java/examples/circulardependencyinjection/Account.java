@@ -2,12 +2,12 @@ package examples.circulardependencyinjection;
 
 import framework.adnotations.Inject;
 
-class Account {
+public class Account {
     public Person owner;
 
     @Inject()
     public Account(Person owner){
-        setOwner(owner);
+        this.owner = owner;
     }
 
     public Person getOwner(){

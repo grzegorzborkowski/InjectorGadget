@@ -2,19 +2,16 @@ package examples.circulardependencyinjection;
 
 import framework.adnotations.Inject;
 
-class Person {
-    private Account account;
+public class Person {
+    public Account account;
 
     @Inject()
     public Person(Account account){
-        setAccount(account);
+        this.account = account;
     }
 
     public Account getAccount(){
         return this.account;
     }
 
-    public void setAccount(Account accounts){
-        this.account = accounts;
-    }
 }

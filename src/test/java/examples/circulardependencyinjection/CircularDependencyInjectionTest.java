@@ -1,31 +1,15 @@
 package examples.circulardependencyinjection;
 
 import framework.InjectService;
-import org.junit.Before;
+import framework.exceptions.CyclicDependencyException;
 import org.junit.Test;
 
-import java.lang.reflect.InvocationTargetException;
-
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 public class CircularDependencyInjectionTest {
-    private Account account;
 
-    @Before
-    public void setUp() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        InjectService injectService = new InjectService(new AccountService());
-        this.account = injectService.getObjectInstance(Account.class);
-    }
-
-    @Test
+    @Test(expected = CyclicDependencyException.class)
     public void circularDITestAccount() throws Exception {
-        assertThat(account.getOwner(), instanceOf(Person.class));
-    }
-
-    @Test
-    public void circularDITestPerson() throws Exception {
-        assertThat(account.getOwner().getAccount(), instanceOf(Account.class));
+        InjectService injectService = new InjectService(new AccountService());
+        injectService.getObjectInstance(Account.class);
     }
 
 }
