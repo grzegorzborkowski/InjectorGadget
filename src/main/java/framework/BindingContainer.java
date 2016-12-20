@@ -15,7 +15,7 @@ public class BindingContainer {
         this.bindings = new HashMap<>();
     }
 
-    protected void addBinding(Class source, Class dest) {
+    protected final void addBinding(Class source, Class dest) {
         source = checkNotNull(source);
         dest = checkNotNull(dest);
         if (bindings.containsKey(source)) {
@@ -28,7 +28,7 @@ public class BindingContainer {
         }
     }
 
-    public void addSingletonAnnotationIfExists(Class source) {
+    void addSingletonAnnotationIfExists(Class source) {
         if (source.isAnnotationPresent(Singleton.class)) {
             if (bindings.get(source) == null) {
                 this.bindings.put(source, new Binding(Scope.SINGLETON));
@@ -38,10 +38,19 @@ public class BindingContainer {
         }
     }
 
-    protected void addBindingWithName(Class source, Class dest, String name) {
+    boolean containsBindingToOtherClass(Class source) {
+        return getBindings().containsKey(source) && getBindings().get(source).getDependencyClass() != null;
+    }
+
+    boolean containsSingletonBinding(Class source) {
+        return getBindings().get(source) != null && getBindings().get(source).getScope() == Scope.SINGLETON;
+    }
+
+    protected final void addBindingWithName(Class source, Class dest, String name) {
     }
 
     public void configure() {
+
     }
 
 }

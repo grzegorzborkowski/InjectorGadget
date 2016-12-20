@@ -20,22 +20,9 @@ public class InjectService {
         return resolveIfSingletonAndGetInstance(tClass);
     }
 
-    private <T> void setObjectProperties(Class<T> tClass, Object tObject) {
-        for (Field f : tClass.getFields()) {
-            if (f.isAnnotationPresent(Inject.class)) {
-                try {
-                    f.set(tObject, resolveIfSingletonAndGetInstance(f.getType()));
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
     private <T> T resolveIfSingletonAndGetInstance(Class<T> tClass) {
         bindingContainer.addSingletonAnnotationIfExists(tClass);
-        if (bindingContainer.getBindings().get(tClass) != null &&
-                bindingContainer.getBindings().get(tClass).getScope() == Scope.SINGLETON) {
+        if (bindingContainer.containsSingletonBinding(tClass)) {
             if (bindingContainer.getBindings().get(tClass).getInstance() != null) {
                 return (T) bindingContainer.getBindings().get(tClass).getInstance();
             } else {
@@ -48,7 +35,7 @@ public class InjectService {
     }
 
     private <T> T getInstance(Class<T> tClass) {
-        if (bindingContainer.getBindings().containsKey(tClass) && bindingContainer.getBindings().get(tClass).getDependencyClass() != null) {
+        if (bindingContainer.containsBindingToOtherClass(tClass)) {
             tClass = bindingContainer.getBindings().get(tClass).getDependencyClass();
             return getInstance(tClass);
         }
@@ -58,7 +45,7 @@ public class InjectService {
         for (Class param : params) {
             try {
                 Object object;
-                if (bindingContainer.getBindings().containsKey(param) && bindingContainer.getBindings().get(param).getDependencyClass() != null) {
+                if (bindingContainer.containsBindingToOtherClass(param)) {
                     Class binded = bindingContainer.getBindings().get(param).getDependencyClass();
                     requiredParams.add(resolveIfSingletonAndGetInstance(binded));
                 } else {
@@ -77,5 +64,17 @@ public class InjectService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private <T> void setObjectProperties(Class<T> tClass, Object tObject) {
+        for (Field f : tClass.getFields()) {
+            if (f.isAnnotationPresent(Inject.class)) {
+                try {
+                    f.set(tObject, resolveIfSingletonAndGetInstance(f.getType()));
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

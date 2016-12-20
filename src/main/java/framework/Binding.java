@@ -15,14 +15,12 @@ public class Binding {
 
     public Binding() {
         dependencyClass = null;
-//        classList = new ArrayList<>();
         this.scope = Scope.PROTOTYPE;
         this.instance = null;
     }
 
     public Binding(Scope scope) {
         dependencyClass = null;
-//        classList = new ArrayList<>();
         this.scope = Scope.SINGLETON;
         this.instance = null;
     }
