@@ -1,4 +1,4 @@
-package annotations;
+package framework.annotations;
 
 import framework.BindingContainer;
 import framework.InjectService;

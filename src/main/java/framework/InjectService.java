@@ -40,8 +40,8 @@ public class InjectService {
 
     private <T> T getInstance(Class<T> tClass) {
         if (bindingContainer.containsBindingToOtherClass(tClass)) {
-            tClass = bindingContainer.getBindings().get(tClass).getDependencyClass();
-            return getInstance(tClass);
+            Class<T> dependencyClass = bindingContainer.getBindings().get(tClass).getDependencyClass();
+            return getInstance(dependencyClass);
         }
         Constructor<T> constructor = resolver.resolveConstructor(tClass);
         Class<?>[] params = resolver.resolveConstructorParams(constructor);

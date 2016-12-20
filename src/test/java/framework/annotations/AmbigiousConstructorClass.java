@@ -1,8 +1,8 @@
-package annotations;
+package framework.annotations;
 
 import framework.adnotations.Inject;
 
-public class AmbigiousConstructorClass {
+class AmbigiousConstructorClass {
     private String name;
     private String phoneNumber;
 

@@ -9,28 +9,25 @@ public class Binding {
     private Class dependencyClass;
     @Getter
     private Scope scope;
+    /**
+     * Returns this instance if scope is singleton and
+     * a object is already created.
+     */
     @Getter
     @Setter
     private Object instance;
 
-    public Binding() {
-        dependencyClass = null;
-        this.scope = Scope.PROTOTYPE;
-        this.instance = null;
+    Binding() {
+        this(Scope.PROTOTYPE);
     }
 
-    public Binding(Scope scope) {
+    Binding(Scope scope) {
         dependencyClass = null;
         this.scope = Scope.SINGLETON;
         this.instance = null;
     }
 
-    public void setSingleton() {
+    void setSingleton() {
         this.scope = Scope.SINGLETON;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("Binding{classList=%s, scope=%s, instance=%s}", dependencyClass, scope, instance);
     }
 }

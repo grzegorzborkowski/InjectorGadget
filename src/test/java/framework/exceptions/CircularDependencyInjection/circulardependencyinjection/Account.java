@@ -1,4 +1,4 @@
-package examples.circulardependencyinjection;
+package framework.exceptions.CircularDependencyInjection.circulardependencyinjection;
 
 import framework.adnotations.Inject;
 

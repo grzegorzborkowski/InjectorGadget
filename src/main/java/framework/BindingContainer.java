@@ -51,7 +51,6 @@ public class BindingContainer {
     }
 
     public void configure() {
-
     }
 
 }

@@ -43,7 +43,7 @@ public class Resolver {
         return constructor.getParameterTypes();
     }
 
-    public boolean checkCycle() {
-        return cycleResolver.checkCycle();
+    public void checkCycle() {
+        cycleResolver.checkCycle();
     }
 }

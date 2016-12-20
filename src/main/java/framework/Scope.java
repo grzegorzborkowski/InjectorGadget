@@ -1,5 +1,5 @@
 package framework;
 
-public enum Scope {
+enum Scope {
     SINGLETON, PROTOTYPE
 }

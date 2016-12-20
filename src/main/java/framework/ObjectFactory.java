@@ -3,7 +3,8 @@ package framework;
 import java.lang.reflect.Constructor;
 import java.util.List;
 
-public class ObjectFactory {
+class ObjectFactory {
+
     public ObjectFactory() {
     }
 
