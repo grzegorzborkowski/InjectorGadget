@@ -28,6 +28,6 @@ public class ActivityTest {
         getActivities();
         Activity firstActivity = activities.get(0);
         Activity secondActivity = activities.get(1);
-        assertSame(firstActivity.getLogService(),secondActivity.getLogService());
+        assertSame(firstActivity.getLogService(), secondActivity.getLogService());
     }
 }

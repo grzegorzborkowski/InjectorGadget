@@ -35,6 +35,18 @@ public class BindingContainer {
             binding.getClassList().add(dest);
             bindings.put(source, binding);
         }
+        addSingletonAnnotationIfExists(source);
+        addSingletonAnnotationIfExists(dest);
+    }
+
+    public void addSingletonAnnotationIfExists(Class source) {
+        if (source.isAnnotationPresent(Singleton.class)) {
+            if (bindings.get(source) == null) {
+                this.bindings.put(source, new Binding(Scope.SINGLETON));
+            } else {
+                bindings.get(source).setSingleton();
+            }
+        }
     }
 
     protected void addBindingWithName(Class source, Class dest, String name) {

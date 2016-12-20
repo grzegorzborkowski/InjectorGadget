@@ -1,7 +1,5 @@
 package framework;
 
-import examples.parameterinjection.User;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -31,14 +29,16 @@ public class InjectService {
         }
     }
 
-    public <T> T resolveIfSingletonAndGetInstance(Class<T> tClass){
-        if(tClass.isAnnotationPresent(Singleton.class)){
-            if (bindingContainer.getSingletons().containsKey(tClass)) {
-                return (T) bindingContainer.getSingletons().get(tClass);
+    private <T> T resolveIfSingletonAndGetInstance(Class<T> tClass) {
+        bindingContainer.addSingletonAnnotationIfExists(tClass);
+        if (bindingContainer.getBindings().get(tClass) != null &&
+                bindingContainer.getBindings().get(tClass).getScope() == Scope.SINGLETON) {
+            if (bindingContainer.getBindings().get(tClass).getInstance() != null) {
+                return (T) bindingContainer.getBindings().get(tClass).getInstance();
             }
             else{
                 T singleton = getInstance(tClass);
-                bindingContainer.getSingletons().put(tClass, singleton);
+                bindingContainer.getBindings().get(tClass).setInstance(singleton);
                 return singleton;
             }
         }
@@ -46,7 +46,7 @@ public class InjectService {
     }
 
     private <T> T getInstance(Class<T> tClass) {
-        if (bindingContainer.getBindings().containsKey(tClass)) {
+        if (bindingContainer.getBindings().containsKey(tClass) && !bindingContainer.getBindings().get(tClass).getClassList().isEmpty()) {
             tClass = bindingContainer.getBindings().get(tClass).getClassList().get(0);
             return getInstance(tClass);
         }
@@ -56,7 +56,7 @@ public class InjectService {
         for (Class param : params) {
             try {
                 Object object;
-                if (bindingContainer.getBindings().containsKey(param)) {
+                if (bindingContainer.getBindings().containsKey(param) && !bindingContainer.getBindings().get(param).getClassList().isEmpty()) {
                     List<Class> binded = bindingContainer.getBindings().get(param).getClassList();
                     for (Class c : binded) {
                         requiredParams.add(resolveIfSingletonAndGetInstance(c));
