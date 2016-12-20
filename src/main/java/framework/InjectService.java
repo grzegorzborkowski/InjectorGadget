@@ -17,9 +17,9 @@ public class InjectService {
         return resolveIfSingletonAndGetInstance(tClass);
     }
 
-    public <T> void setObjectProperties(Class<T> tClass, Object tObject) {
-        for(Field f : tClass.getFields()){
-            if(f.isAnnotationPresent(Inject.class)){
+    private <T> void setObjectProperties(Class<T> tClass, Object tObject) {
+        for (Field f : tClass.getFields()) {
+            if (f.isAnnotationPresent(Inject.class)) {
                 try {
                     f.set(tObject, resolveIfSingletonAndGetInstance(f.getType()));
                 } catch (IllegalAccessException e) {
@@ -35,8 +35,7 @@ public class InjectService {
                 bindingContainer.getBindings().get(tClass).getScope() == Scope.SINGLETON) {
             if (bindingContainer.getBindings().get(tClass).getInstance() != null) {
                 return (T) bindingContainer.getBindings().get(tClass).getInstance();
-            }
-            else{
+            } else {
                 T singleton = getInstance(tClass);
                 bindingContainer.getBindings().get(tClass).setInstance(singleton);
                 return singleton;

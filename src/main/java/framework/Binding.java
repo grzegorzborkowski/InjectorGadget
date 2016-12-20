@@ -33,10 +33,6 @@ public class Binding {
 
     @Override
     public String toString() {
-        return "Binding{" +
-                "classList=" + classList +
-                ", scope=" + scope +
-                ", instance=" + instance +
-                '}';
+        return String.format("Binding{classList=%s, scope=%s, instance=%s}", classList, scope, instance);
     }
 }
