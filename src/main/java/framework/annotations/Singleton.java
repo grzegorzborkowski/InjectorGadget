@@ -1,4 +1,4 @@
-package framework.adnotations;
+package framework.annotations;
 
 
 import java.lang.annotation.Retention;

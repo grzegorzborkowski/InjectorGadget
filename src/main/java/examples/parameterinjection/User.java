@@ -1,6 +1,6 @@
 package examples.parameterinjection;
 
-import framework.adnotations.Inject;
+import framework.annotations.Inject;
 
 public class User {
     @Inject

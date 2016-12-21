@@ -1,6 +1,6 @@
 package examples.twolevelinheritanceconstructorinjection;
 
-import framework.adnotations.Inject;
+import framework.annotations.Inject;
 
 public abstract class TransactionLog {
     @Inject()

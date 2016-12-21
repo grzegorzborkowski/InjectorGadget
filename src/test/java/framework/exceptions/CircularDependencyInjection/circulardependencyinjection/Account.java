@@ -1,6 +1,6 @@
 package framework.exceptions.CircularDependencyInjection.circulardependencyinjection;
 
-import framework.adnotations.Inject;
+import framework.annotations.Inject;
 
 public class Account {
     public Person owner;

@@ -1,7 +1,7 @@
 package framework.resolvers;
 
 import framework.Binding;
-import framework.adnotations.Inject;
+import framework.annotations.Inject;
 import framework.exceptions.AmbigiousConstructorException;
 import lombok.Getter;
 

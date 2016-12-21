@@ -1,6 +1,6 @@
 package examples.singletoninjection;
 
-import framework.adnotations.Inject;
+import framework.annotations.Inject;
 
 public class Activity {
 

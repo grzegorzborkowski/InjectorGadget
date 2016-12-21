@@ -1,6 +1,6 @@
 package examples.chaineddependencyinjection;
 
-import framework.adnotations.Inject;
+import framework.annotations.Inject;
 
 public class Cylinder extends AbstractCylinder {
     @Inject

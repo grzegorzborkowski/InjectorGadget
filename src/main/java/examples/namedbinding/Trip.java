@@ -1,6 +1,6 @@
 package examples.namedbinding;
 
-import framework.adnotations.Inject;
+import framework.annotations.Inject;
 import lombok.Getter;
 
 class Trip {

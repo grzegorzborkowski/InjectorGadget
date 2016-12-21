@@ -1,6 +1,6 @@
 package examples.singletoninjection;
 
-import framework.adnotations.Singleton;
+import framework.annotations.Singleton;
 
 @Singleton
 public class LogService {

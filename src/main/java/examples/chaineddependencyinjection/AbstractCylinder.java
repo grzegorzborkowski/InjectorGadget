@@ -1,6 +1,6 @@
 package examples.chaineddependencyinjection;
 
-import framework.adnotations.Inject;
+import framework.annotations.Inject;
 
 public abstract class AbstractCylinder {
     Piston piston;
