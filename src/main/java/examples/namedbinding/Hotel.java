@@ -1,4 +1,6 @@
 package examples.namedbinding;
 
-class Hotel extends Accommodation {
+public class Hotel extends Accommodation {
+    public Hotel() {
+    }
 }

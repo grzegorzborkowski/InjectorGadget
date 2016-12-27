@@ -10,7 +10,8 @@ public class NamedBindingInjectionTest {
     @Test
     public void getAccomodationFromNamedBindingInjection() throws Exception {
         InjectService injectService = new InjectService(new TripService());
-        Accommodation accommodation = injectService.getObjectInstance(Trip.class).getAccommodation();
+        Accommodation accommodation = injectService.getObjectInstance(Trip.class, "Hotel").
+                getAccommodation();
         assertThat(accommodation, instanceOf(Hotel.class));
     }
 

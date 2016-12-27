@@ -29,6 +29,9 @@ public class BindingContainer {
         }
     }
 
+    protected final void addBindingWithName(Class source, Class dest, String name) {
+    }
+
     final void addSingletonAnnotationIfExists(Class source) {
         if (source.isAnnotationPresent(Singleton.class)) {
             if (bindings.get(source) == null) {
@@ -45,9 +48,6 @@ public class BindingContainer {
 
     final boolean containsSingletonBinding(Class source) {
         return getBindings().get(source) != null && getBindings().get(source).getScope() == Scope.SINGLETON;
-    }
-
-    protected final void addBindingWithName(Class source, Class dest, String name) {
     }
 
     public void configure() {

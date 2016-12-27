@@ -3,11 +3,11 @@ package examples.namedbinding;
 import framework.annotations.Inject;
 import lombok.Getter;
 
-class Trip {
+public class Trip {
     @Getter
     private Accommodation accommodation;
 
-    @Inject(bindingName = "Hotel")
+    @Inject
     public Trip(Accommodation accommodation) {
         this.accommodation = accommodation;
     }
