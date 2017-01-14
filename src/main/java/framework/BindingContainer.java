@@ -8,12 +8,14 @@ import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class BindingContainer {
+public abstract class BindingContainer {
     @Getter
+    // TODO: immutable map instead of mutable when Binding Container constructor
     private Map<Class, Binding> bindings;
 
     public BindingContainer() {
         this.bindings = new HashMap<>();
+        this.configure();
     }
 
     protected final void addBinding(Class source, Class dest) {
@@ -50,7 +52,6 @@ public class BindingContainer {
         return getBindings().get(source) != null && getBindings().get(source).getScope() == Scope.SINGLETON;
     }
 
-    public void configure() {
-    }
+    public abstract void configure();
 
 }

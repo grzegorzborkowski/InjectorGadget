@@ -1,7 +1,7 @@
 package examples.singletoninjection;
 
-import framework.BindingContainer;
 import framework.InjectService;
+import framework.annotations.SimpleBindingContainer;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,7 +17,7 @@ public class ActivityTest {
     public void getActivities() throws IllegalAccessException, InstantiationException {
         final int ACTIVITIES_NUMBER = 2;
         activities = new ArrayList<>();
-        InjectService injectService = new InjectService(new BindingContainer());
+        InjectService injectService = new InjectService(new SimpleBindingContainer());
         for (int i = 0; i < ACTIVITIES_NUMBER; i++) {
             activities.add(injectService.getObjectInstance(Activity.class));
         }

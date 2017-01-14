@@ -3,6 +3,8 @@ package framework;
 import framework.resolvers.Resolver;
 
 public class InjectService {
+    // TODO: InjectService should have a dependency to CycleResolver instead of
+    // TODO: how it's now that resolver has a dependency to CycleResolver
     private final Resolver resolver;
     private BindingContainer bindingContainer;
     private ObjectFactory objectFactory;

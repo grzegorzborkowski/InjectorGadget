@@ -8,6 +8,13 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * TODO: ObjectFactory should have a dependency to BINDING
+ * TODO: instead of to BindingContainer.
+ * TODO: InjectService has bindingContainer and provides it to ObjectFactory exact binding and it creats object from that
+ * TODO: implement a new feature: - dependency to collection, -injection through field -named binding -dependency to already created objects
+ */
 class ObjectFactory {
     private BindingContainer bindingContainer;
     private Resolver resolver;
