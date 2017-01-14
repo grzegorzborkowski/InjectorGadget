@@ -6,7 +6,6 @@ import framework.resolvers.Resolver;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * TODO: ObjectFactory should have a dependency to BINDING
@@ -18,22 +17,14 @@ class ObjectFactory {
     private BindingContainer bindingContainer;
     private Resolver resolver;
     private CycleDetector cycleDetector;
+    private ObjectBuilder objectBuilder;
+
 
     public ObjectFactory(BindingContainer bindingContainer, Resolver resolver, CycleDetector cycleDetector) {
         this.bindingContainer = bindingContainer;
         this.resolver = resolver;
         this.cycleDetector = cycleDetector;
-    }
-
-    final <T> T createObjectFromConstructorAndParams(Constructor<T> constructor, List<Object> requiredParams) {
-        Object[] requiredParamsArray = new Object[requiredParams.size()];
-        requiredParamsArray = requiredParams.toArray(requiredParamsArray);
-        try {
-            return constructor.newInstance(requiredParamsArray);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        this.objectBuilder = new ObjectBuilder();
     }
 
     final <T> T createInstanceWithRequiredDependencies(Class<T> tClass) {
@@ -73,14 +64,9 @@ class ObjectFactory {
                 requiredParams.add(object);
             }
         }
-        try {
-            T result = createObjectFromConstructorAndParams(constructor, requiredParams);
-            setObjectProperties(tClass, result);
-            return result;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        T result = objectBuilder.createObjectFromConstructorAndParams(constructor, requiredParams);
+        setObjectProperties(tClass, result);
+        return result;
     }
 
     private <T> void setObjectProperties(Class<T> tClass, Object tObject) {
