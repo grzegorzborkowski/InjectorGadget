@@ -1,17 +1,16 @@
-package framework.resolvers;
+package framework;
 
 import com.google.common.graph.GraphBuilder;
 import com.google.common.graph.Graphs;
 import com.google.common.graph.MutableGraph;
-import framework.Binding;
 import framework.exceptions.CircularDependencyException;
 
 import java.util.Map;
 
-public class CycleResolver {
+public class CycleDetector {
     private MutableGraph<Class> graph = GraphBuilder.directed().build();
 
-    public CycleResolver(Map<Class, Binding> bindings) {
+    public CycleDetector(Map<Class, Binding> bindings) {
         this.addEdgesFromBindingContainer(bindings);
         addEdgesFromBindingContainer(bindings);
     }

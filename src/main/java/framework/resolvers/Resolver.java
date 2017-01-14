@@ -1,19 +1,13 @@
 package framework.resolvers;
 
-import framework.Binding;
 import framework.annotations.Inject;
 import framework.exceptions.AmbigiousConstructorException;
-import lombok.Getter;
 
 import java.lang.reflect.Constructor;
-import java.util.Map;
 
 public class Resolver {
-    @Getter
-    private CycleResolver cycleResolver;
 
-    public Resolver(Map<Class, Binding> bindings) {
-        cycleResolver = new CycleResolver(bindings);
+    public Resolver() {
     }
 
     public final <T> Constructor<T> resolveConstructor(Class<T> tClass) {
@@ -41,9 +35,5 @@ public class Resolver {
 
     public final <T> Class<?>[] resolveConstructorParams(Constructor<T> constructor) {
         return constructor.getParameterTypes();
-    }
-
-    public void checkCycle() {
-        cycleResolver.checkCycle();
     }
 }

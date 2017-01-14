@@ -8,7 +8,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * TODO: ObjectFactory should have a dependency to BINDING
  * TODO: instead of to BindingContainer.
@@ -18,10 +17,12 @@ import java.util.List;
 class ObjectFactory {
     private BindingContainer bindingContainer;
     private Resolver resolver;
+    private CycleDetector cycleDetector;
 
-    public ObjectFactory(BindingContainer bindingContainer, Resolver resolver) {
+    public ObjectFactory(BindingContainer bindingContainer, Resolver resolver, CycleDetector cycleDetector) {
         this.bindingContainer = bindingContainer;
         this.resolver = resolver;
+        this.cycleDetector = cycleDetector;
     }
 
     final <T> T createObjectFromConstructorAndParams(Constructor<T> constructor, List<Object> requiredParams) {
@@ -67,7 +68,7 @@ class ObjectFactory {
                 Class binded = bindingContainer.getBindings().get(param).getDependencyClass();
                 requiredParams.add(createInstanceWithRequiredDependencies(binded));
             } else {
-                resolver.getCycleResolver().addEdge(tClass, param);
+                this.cycleDetector.addEdge(tClass, param);
                 object = createInstanceWithRequiredDependencies(param);
                 requiredParams.add(object);
             }
