@@ -1,5 +1,6 @@
 package framework;
 
+import com.google.common.collect.ImmutableMap;
 import framework.annotations.Singleton;
 import lombok.Getter;
 
@@ -9,25 +10,26 @@ import java.util.Map;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class BindingContainer {
+    private Map<Class, Binding> mutableBindings;
     @Getter
-    // TODO: immutable map instead of mutable when Binding Container constructor
-    private Map<Class, Binding> bindings;
+    private ImmutableMap<Class, Binding> bindings;
 
     public BindingContainer() {
-        this.bindings = new HashMap<>();
+        this.mutableBindings = new HashMap<>();
         this.configure();
+        this.bindings = ImmutableMap.copyOf(mutableBindings);
     }
 
     protected final void addBinding(Class source, Class dest) {
         source = checkNotNull(source);
         dest = checkNotNull(dest);
-        if (bindings.containsKey(source)) {
-            Binding binding = bindings.get(source);
+        if (mutableBindings.containsKey(source)) {
+            Binding binding = mutableBindings.get(source);
             binding.setDependencyClass(dest);
         } else {
             Binding binding = new Binding();
             binding.setDependencyClass(dest);
-            bindings.put(source, binding);
+            mutableBindings.put(source, binding);
         }
     }
 
@@ -37,9 +39,10 @@ public abstract class BindingContainer {
     final void addSingletonAnnotationIfExists(Class source) {
         if (source.isAnnotationPresent(Singleton.class)) {
             if (bindings.get(source) == null) {
-                this.bindings.put(source, new Binding(Scope.SINGLETON));
+                this.mutableBindings.put(source, new Binding(Scope.SINGLETON));
+                this.bindings = ImmutableMap.copyOf(mutableBindings);
             } else {
-                bindings.get(source).setSingleton();
+                this.bindings.get(source).setSingleton();
             }
         }
     }
