@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import framework.annotations.Singleton;
 import lombok.Getter;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +19,12 @@ public abstract class BindingContainer {
         this.mutableBindings = new HashMap<>();
         this.configure();
         this.bindings = ImmutableMap.copyOf(mutableBindings);
+    }
+
+    // TODO: implement
+    protected final void addBinding(Class source, Collection<?> dest) {
+        source = checkNotNull(source);
+        dest = checkNotNull(dest);
     }
 
     protected final void addBinding(Class source, Class dest) {

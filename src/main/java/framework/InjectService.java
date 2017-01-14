@@ -2,6 +2,8 @@ package framework;
 
 import framework.resolvers.Resolver;
 
+import java.util.Collection;
+
 public class InjectService {
     private final Resolver resolver;
     private BindingContainer bindingContainer;
@@ -19,6 +21,11 @@ public class InjectService {
     public final <T> T getObjectInstance(Class<T> tClass) {
         this.bindingContainer.configure();
         return objectFactory.createInstanceWithRequiredDependencies(tClass);
+    }
+
+    // TODO: implement
+    public final <T> T getObjectInstance(Collection<T> collection) {
+        return null;
     }
 
     // TODO: implement
