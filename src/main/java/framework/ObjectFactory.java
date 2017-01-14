@@ -65,10 +65,10 @@ class ObjectFactory {
             Object object;
             if (bindingContainer.containsBindingToOtherClass(param)) {
                 Class binded = bindingContainer.getBindings().get(param).getDependencyClass();
-                requiredParams.add(resolveIfSingletonAndGetInstance(binded));
+                requiredParams.add(createInstanceWithRequiredDependencies(binded));
             } else {
                 resolver.getCycleResolver().addEdge(tClass, param);
-                object = resolveIfSingletonAndGetInstance(param);
+                object = createInstanceWithRequiredDependencies(param);
                 requiredParams.add(object);
             }
         }
@@ -86,7 +86,7 @@ class ObjectFactory {
         for (Field f : tClass.getFields()) {
             if (f.isAnnotationPresent(Inject.class)) {
                 try {
-                    f.set(tObject, resolveIfSingletonAndGetInstance(f.getType()));
+                    f.set(tObject, createInstanceWithRequiredDependencies(f.getType()));
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
