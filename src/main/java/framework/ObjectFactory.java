@@ -6,6 +6,8 @@ import framework.resolvers.Resolver;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * TODO: ObjectFactory should have a dependency to BINDING
@@ -64,6 +66,14 @@ class ObjectFactory {
 
     private final <T> T getInstance(Class<T> tClass) {
         Constructor<T> constructor = resolver.resolveConstructor(tClass);
+        ArrayList<Object> requiredParams = getRequiredParams(constructor, tClass);
+        HashMap<Field, Object> requiredFields = getRequiredFields(tClass);
+        T result = objectBuilder.createObjectFromConstructorAndParams(constructor, requiredParams);
+        objectBuilder.setObjectFields(result, requiredFields);
+        return result;
+    }
+
+    private final <T> ArrayList<Object> getRequiredParams(Constructor<T> constructor, Class<T> tClass) {
         Class<?>[] params = resolver.resolveConstructorParams(constructor);
         ArrayList<Object> requiredParams = new ArrayList<>();
         for (Class param : params) {
@@ -72,20 +82,16 @@ class ObjectFactory {
             object = createInstanceWithRequiredDependencies(param);
             requiredParams.add(object);
         }
-        T result = objectBuilder.createObjectFromConstructorAndParams(constructor, requiredParams);
-        setObjectProperties(tClass, result);
-        return result;
+        return requiredParams;
     }
 
-    private <T> void setObjectProperties(Class<T> tClass, Object tObject) {
+    private <T> HashMap<Field, Object> getRequiredFields(Class<T> tClass) {
+        HashMap<Field, Object> requiredFields = new HashMap();
         for (Field f : tClass.getFields()) {
             if (f.isAnnotationPresent(Inject.class)) {
-                try {
-                    f.set(tObject, createInstanceWithRequiredDependencies(f.getType()));
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
+                requiredFields.put(f, createInstanceWithRequiredDependencies(f.getType()));
             }
         }
+        return requiredFields;
     }
 }

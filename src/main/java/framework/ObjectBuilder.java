@@ -1,7 +1,13 @@
 package framework;
 
+import framework.annotations.Inject;
+
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ObjectBuilder {
 
@@ -17,5 +23,15 @@ public class ObjectBuilder {
             e.printStackTrace();
         }
         return null;
+    }
+
+    final void setObjectFields(Object tObject, HashMap<Field, Object> fields) {
+        for (Map.Entry<Field,Object> entry : fields.entrySet()) {
+            try {
+                entry.getKey().set(tObject, entry.getValue());
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
