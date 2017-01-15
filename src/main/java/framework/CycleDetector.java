@@ -17,8 +17,10 @@ public class CycleDetector {
 
     private void addEdgesFromBindingContainer(Map<Class, Binding> bindings) {
         for (Map.Entry<Class, Binding> entry : bindings.entrySet()) {
-            Class to = entry.getValue().getDependencyClass();
-            graph.putEdge(entry.getKey(), to);
+            if(entry.getValue().getScope() == Scope.PROTOTYPE){
+                Class to = entry.getValue().getDependencyClass();
+                graph.putEdge(entry.getKey(), to);
+            }
         }
     }
 
