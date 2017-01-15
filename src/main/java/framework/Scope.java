@@ -1,5 +1,5 @@
 package framework;
 
 enum Scope {
-    SINGLETON, PROTOTYPE
+    SINGLETON, PROTOTYPE, COLLECTION
 }

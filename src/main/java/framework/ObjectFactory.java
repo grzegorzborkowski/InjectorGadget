@@ -10,7 +10,7 @@ import java.util.ArrayList;
 /**
  * TODO: ObjectFactory should have a dependency to BINDING
  * TODO: instead of to BindingContainer.
- * TODO: InjectService has bindingContainer and provides it to ObjectFactory exact binding and it creats object from that
+ * TODO: InjectService has bindingContainer and provides to ObjectFactory exact binding and it creates object from that
  * TODO: implement a new feature: - dependency to collection, -injection through field -named binding -dependency to already created objects
  */
 class ObjectFactory {
@@ -37,32 +37,40 @@ class ObjectFactory {
             if (bindingContainer.getBindings().get(tClass).getInstance() != null) {
                 return (T) bindingContainer.getBindings().get(tClass).getInstance();
             } else {
-                T singleton = getInstance(tClass);
+                T singleton = resolveIfCollectionAndGetInstance(tClass);
                 bindingContainer.getBindings().get(tClass).setInstance(singleton);
                 return singleton;
             }
         }
-        return getInstance(tClass);
+        return resolveIfCollectionAndGetInstance(tClass);
+    }
+
+    private final <T> T resolveIfCollectionAndGetInstance(Class<T> tClass) {
+        if(bindingContainer.containsCollectionBinding(tClass)){
+            return (T)bindingContainer.getBindings().get(tClass).getInstance();
+        }
+        return resolveImplementationAndGetInstance(tClass);
+    }
+
+    private final <T> T resolveImplementationAndGetInstance(Class<T> tClass){
+        if (bindingContainer.containsBindingToOtherClass(tClass)) {
+            Class<T> dependencyClass = bindingContainer.getBindings().get(tClass).getDependencyClass();
+            return resolveImplementationAndGetInstance(dependencyClass);
+        }
+        else {
+            return getInstance(tClass);
+        }
     }
 
     private final <T> T getInstance(Class<T> tClass) {
-        if (bindingContainer.containsBindingToOtherClass(tClass)) {
-            Class<T> dependencyClass = bindingContainer.getBindings().get(tClass).getDependencyClass();
-            return getInstance(dependencyClass);
-        }
         Constructor<T> constructor = resolver.resolveConstructor(tClass);
         Class<?>[] params = resolver.resolveConstructorParams(constructor);
         ArrayList<Object> requiredParams = new ArrayList<>();
         for (Class param : params) {
             Object object;
-            if (bindingContainer.containsBindingToOtherClass(param)) {
-                Class binded = bindingContainer.getBindings().get(param).getDependencyClass();
-                requiredParams.add(createInstanceWithRequiredDependencies(binded));
-            } else {
-                this.cycleDetector.addEdge(tClass, param);
-                object = createInstanceWithRequiredDependencies(param);
-                requiredParams.add(object);
-            }
+            this.cycleDetector.addEdge(tClass, param);
+            object = createInstanceWithRequiredDependencies(param);
+            requiredParams.add(object);
         }
         T result = objectBuilder.createObjectFromConstructorAndParams(constructor, requiredParams);
         setObjectProperties(tClass, result);

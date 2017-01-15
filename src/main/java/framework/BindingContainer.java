@@ -25,6 +25,14 @@ public abstract class BindingContainer {
     protected final void addBinding(Class source, Collection<?> dest) {
         source = checkNotNull(source);
         dest = checkNotNull(dest);
+        if (mutableBindings.containsKey(source)) {
+            Binding binding = mutableBindings.get(source);
+            binding.setInstance(dest);
+        } else {
+            Binding binding = new Binding(Scope.COLLECTION);
+            binding.setInstance(dest);
+            mutableBindings.put(source, binding);
+        }
     }
 
     protected final void addBinding(Class source, Class dest) {
@@ -60,6 +68,10 @@ public abstract class BindingContainer {
 
     final boolean containsSingletonBinding(Class source) {
         return getBindings().get(source) != null && getBindings().get(source).getScope() == Scope.SINGLETON;
+    }
+
+    final boolean containsCollectionBinding(Class source) {
+        return getBindings().get(source) != null && getBindings().get(source).getScope() == Scope.COLLECTION;
     }
 
     public abstract void configure();
