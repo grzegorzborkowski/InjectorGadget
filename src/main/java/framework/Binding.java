@@ -9,13 +9,6 @@ public class Binding {
     private Class dependencyClass;
     @Getter
     private Scope scope;
-    /**
-     * Returns this instance if scope is singleton or collection and
-     * a object is already created.
-     */
-    @Getter
-    @Setter
-    private Object instance;
 
     Binding() {
         this(Scope.PROTOTYPE);
@@ -26,12 +19,10 @@ public class Binding {
             case SINGLETON:
                 dependencyClass = null;
                 this.scope = Scope.SINGLETON;
-                this.instance = null;
                 break;
             case COLLECTION:
                 dependencyClass = null;
                 this.scope = Scope.COLLECTION;
-                this.instance = null;
                 break;
         }
     }

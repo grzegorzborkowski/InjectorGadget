@@ -36,11 +36,12 @@ class ObjectFactory {
     private <T> T resolveIfSingletonAndGetInstance(Class<T> tClass) {
         bindingContainer.addSingletonAnnotationIfExists(tClass);
         if (bindingContainer.containsSingletonBinding(tClass)) {
-            if (bindingContainer.getBindings().get(tClass).getInstance() != null) {
-                return (T) bindingContainer.getBindings().get(tClass).getInstance();
+            Binding binding = bindingContainer.getBindings().get(tClass);
+            if (bindingContainer.getSingletons().get(binding) != null) {
+                return (T) bindingContainer.getSingletons().get(binding);
             } else {
                 T singleton = resolveIfCollectionAndGetInstance(tClass);
-                bindingContainer.getBindings().get(tClass).setInstance(singleton);
+                bindingContainer.getSingletons().put(binding,singleton);
                 return singleton;
             }
         }
@@ -49,7 +50,8 @@ class ObjectFactory {
 
     private final <T> T resolveIfCollectionAndGetInstance(Class<T> tClass) {
         if(bindingContainer.containsCollectionBinding(tClass)){
-            return (T)bindingContainer.getBindings().get(tClass).getInstance();
+            Binding binding = bindingContainer.getBindings().get(tClass);
+            return (T)bindingContainer.getCollections().get(binding);
         }
         return resolveImplementationAndGetInstance(tClass);
     }

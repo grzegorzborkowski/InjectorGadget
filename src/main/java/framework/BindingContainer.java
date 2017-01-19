@@ -12,26 +12,33 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class BindingContainer {
     private Map<Class, Binding> mutableBindings;
+    private Map<Binding, Collection> mutableCollections;
     @Getter
     private ImmutableMap<Class, Binding> bindings;
+    @Getter
+    private Map<Binding, Object> singletons;
+    @Getter
+    private ImmutableMap<Binding, Collection> collections;
 
     public BindingContainer() {
         this.mutableBindings = new HashMap<>();
+        this.mutableCollections = new HashMap<>();
+        this.singletons = new HashMap<>();
         this.configure();
         this.bindings = ImmutableMap.copyOf(mutableBindings);
+        this.collections = ImmutableMap.copyOf(mutableCollections);
     }
 
-    // TODO: implement
     protected final void addBinding(Class source, Collection<?> dest) {
         source = checkNotNull(source);
         dest = checkNotNull(dest);
         if (mutableBindings.containsKey(source)) {
             Binding binding = mutableBindings.get(source);
-            binding.setInstance(dest);
+            mutableCollections.put(binding, dest);
         } else {
             Binding binding = new Binding(Scope.COLLECTION);
-            binding.setInstance(dest);
             mutableBindings.put(source, binding);
+            mutableCollections.put(binding, dest);
         }
     }
 
