@@ -3,11 +3,13 @@ package framework;
 import framework.annotations.Inject;
 import framework.resolvers.Resolver;
 
+import javax.swing.text.html.Option;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * TODO: ObjectFactory should have a dependency to BINDING
@@ -30,18 +32,44 @@ class ObjectFactory {
     }
 
     final <T> T createInstanceWithRequiredDependencies(Class<T> tClass) {
-        return resolveIfSingletonAndGetInstance(tClass);
+        return resolveImplementationAndGetInstance(tClass);
+    }
+
+    final <T> T createInstanceWithRequiredDependencies(Class<T> tClass, String name) {
+        return resolveImplementationAndGetInstance(tClass, name);
+    }
+
+    private final <T> T resolveImplementationAndGetInstance(Class<T> tClass){
+        Optional<Binding> oBinding = bindingContainer.getUnnamedBindingToOtherClass(tClass);
+        if (oBinding.isPresent()) {
+            Class<T> dependencyClass = oBinding.get().getDependencyClass();
+            return resolveImplementationAndGetInstance(dependencyClass);
+        }
+        else {
+            return resolveIfSingletonAndGetInstance(tClass);
+        }
+    }
+
+    private final <T> T resolveImplementationAndGetInstance(Class<T> tClass, String name){
+        Optional<Binding> oBinding = bindingContainer.getNamedBindingToOtherClass(tClass, name);
+        if (oBinding.isPresent()) {
+            Class<T> dependencyClass = oBinding.get().getDependencyClass();
+            return resolveImplementationAndGetInstance(dependencyClass);
+        }
+        else {
+            return resolveIfSingletonAndGetInstance(tClass);
+        }
     }
 
     private <T> T resolveIfSingletonAndGetInstance(Class<T> tClass) {
         bindingContainer.addSingletonAnnotationIfExists(tClass);
-        if (bindingContainer.containsSingletonBinding(tClass)) {
-            Binding binding = bindingContainer.getBindings().get(tClass);
-            if (bindingContainer.getSingletons().get(binding) != null) {
-                return (T) bindingContainer.getSingletons().get(binding);
+        Optional<Binding> oBinding = bindingContainer.getSingletonBinding(tClass);
+        if (oBinding.isPresent()) {
+            if (bindingContainer.getSingletons().get(oBinding.get()) != null) {
+                return (T) bindingContainer.getSingletons().get(oBinding.get());
             } else {
                 T singleton = resolveIfCollectionAndGetInstance(tClass);
-                bindingContainer.getSingletons().put(binding,singleton);
+                bindingContainer.getSingletons().put(oBinding.get(),singleton);
                 return singleton;
             }
         }
@@ -49,21 +77,11 @@ class ObjectFactory {
     }
 
     private final <T> T resolveIfCollectionAndGetInstance(Class<T> tClass) {
-        if(bindingContainer.containsCollectionBinding(tClass)){
-            Binding binding = bindingContainer.getBindings().get(tClass);
-            return (T)bindingContainer.getCollections().get(binding);
+        Optional<Binding> oBinding = bindingContainer.getCollectionBinding(tClass);
+        if(oBinding.isPresent()){
+            return (T)bindingContainer.getCollections().get(oBinding.get());
         }
-        return resolveImplementationAndGetInstance(tClass);
-    }
-
-    private final <T> T resolveImplementationAndGetInstance(Class<T> tClass){
-        if (bindingContainer.containsBindingToOtherClass(tClass)) {
-            Class<T> dependencyClass = bindingContainer.getBindings().get(tClass).getDependencyClass();
-            return resolveImplementationAndGetInstance(dependencyClass);
-        }
-        else {
-            return getInstance(tClass);
-        }
+        return getInstance(tClass);
     }
 
     private final <T> T getInstance(Class<T> tClass) {

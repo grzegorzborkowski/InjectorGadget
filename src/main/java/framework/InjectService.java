@@ -19,17 +19,10 @@ public class InjectService {
     }
 
     public final <T> T getObjectInstance(Class<T> tClass) {
-        this.bindingContainer.configure();
         return objectFactory.createInstanceWithRequiredDependencies(tClass);
     }
 
-    // TODO: implement
-    public final <T> T getObjectInstance(Collection<T> collection) {
-        return null;
-    }
-
-    // TODO: implement
     public final <T> T getObjectInstance(Class<T> tClass, String name) {
-        return getObjectInstance(tClass);
+        return objectFactory.createInstanceWithRequiredDependencies(tClass, name);
     }
 }

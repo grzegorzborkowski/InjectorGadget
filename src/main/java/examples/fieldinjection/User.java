@@ -1,4 +1,4 @@
-package examples.parameterinjection;
+package examples.fieldinjection;
 
 import framework.annotations.Inject;
 
